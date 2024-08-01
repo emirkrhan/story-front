@@ -112,7 +112,7 @@ function Comment({ comment, userId, storyWriterId }) {
         <div key={comment.id} className='w-full h-auto bg-white rounded-lg'>
             <div className='w-full px-4 flex pt-4'>
                 <div className='w-1/12 h-10 flex items-center justify-center'>
-                    <a href={`/user/${comment.user.id}`}> <img src={`${apiUrl}/uploads/${comment.user.profileImage}.jpg`} alt="profile pht" className='w-8 h-8 rounded-full' /></a>
+                    <a href={`/user/${comment.user.id}`}> <img src={`${apiUrl}/uploads/${comment.user.profileImage}`} alt="profile pht" className='w-8 h-8 rounded-full' /></a>
                 </div>
                 <div className='flex-1 h-10 font-semibold text-sm flex items-center'>@{comment.user.userName}</div>
                 <div className='px-4 h-10 font-medium text-xs flex items-center'>{formatDate(comment.commentTime)}</div>
