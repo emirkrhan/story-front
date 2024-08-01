@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import PostView from '../components/PostView';
 import Navbar from '../components/Navbar';
@@ -17,6 +17,7 @@ function Profile() {
     })
 
 
+    const fileInputRef = useRef(null);
     const userQuery = useQuery({
         queryKey: ["user", userId],
         queryFn: () => axios.get(`${apiUrl}/users/${userId}`).then(res => res.data)
@@ -106,10 +107,8 @@ function Profile() {
                 return "Yönetici";
             case 2:
                 return "Baş Editör";
-            case 3:
-                return "Tebrikler! Rozetiniz: öne çıkan yazar";
             default:
-                return "Rozet bilgisi bulunamadı";
+                return "Kullanıcı";
         }
     }
 
@@ -135,7 +134,40 @@ function Profile() {
         });
     };
 
+    const mutationPhoto = useMutation({
+        mutationFn: (formData) => {
+        return axios.post(`${apiUrl}/users/uploadProfilePicture`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+    }});
+
     const biography = sanitize(user?.biography);
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('userId', userId);
+
+            mutationPhoto.mutate(formData, {
+                onSuccess: (response) => {
+                    console.log('Dosya yüklendi:', response.data);
+                    alert('Dosya başarıyla yüklendi!');
+                },
+                onError: (error) => {
+                    console.error('Dosya yükleme hatası:', error.response ? error.response.data : error.message);
+                    alert('Dosya yükleme hatası: ' + (error.response ? error.response.data : error.message));
+                },
+            });
+        }
+    };
+
+    const handleProfileClick = () => {
+        fileInputRef.current.click();
+    };
 
 
     return (
@@ -144,18 +176,39 @@ function Profile() {
             <div className='w-1/3 h-auto pl-28 pt-10 flex flex-col gap-2'>
                 <div className='w-full h-auto flex flex-col rounded-lg bg-white py-4'>
                     <div className='w-full py-2 flex items-center justify-center'>
-                        <img src={`${apiUrl}/uploads/${userId}.jpg`} alt="profile" className='w-20 h-20 rounded-full object-cover' />
+                        <div onClick={handleProfileClick} style={{ cursor: 'pointer' }}>
+                            <img
+                                src={`${apiUrl}/uploads/${user?.profileImage}`}
+                                alt="Profile"
+                                style={{ width: '100px', height: '100px', borderRadius: '50%' }}
+                            />
+                        </div>
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            style={{ display: 'none' }}
+                            accept=".jpg,.jpeg,.png"
+                            onChange={handleFileChange}
+                        />
                     </div>
+                    {/* <div className='w-full py-2 flex items-center justify-center'>
+                        <input type="file"
+                            id="file"
+                            accept=".jpg,.jpeg,.png"
+                            onChange={handleFileChange}
+                            required />
+                        <img src={`${apiUrl}/uploads/${userId}.jpg`} alt="profile" className='w-20 h-20 rounded-full object-cover' />
+                    </div> */}
 
                     <div className='w-full py-2 flex items-center justify-center before:content-["@"] text-sm font-medium'>
                         {user?.userName}
                     </div>
 
-                    <div className='w-full flex items-center justify-center'>
+                    {user?.badge === 0 ? null : <div className='w-full flex items-center justify-center'>
                         <div className='px-4 rounded-full py-1 bg-[#7469b6] text-xs text-white font-semibold'>
                             {badgeFunc(user?.badge)}
                         </div>
-                    </div>
+                    </div>}
 
                     <div className='w-full flex items-center justify-center py-4'>
                         <div className='w-24 h-auto flex flex-col items-center justify-center border-r border-gray-300 text-sm'>
@@ -193,7 +246,7 @@ function Profile() {
                 <div className='w-11/12 h-16 flex gap-4 *:px-6 *:h-8 *:rounded-full *:text-xs *:font-medium'>
                     <button className={activeTab === 'stories' ? 'bg-[#7469b6] text-white' : 'bg-white'}
                         onClick={() => setActiveTab('stories')}>Hikayeler</button>
-                  {userId === myUserId ?   <button className={activeTab === 'drafts' ? 'bg-[#7469b6] text-white' : 'bg-white'}
+                    {userId === myUserId ? <button className={activeTab === 'drafts' ? 'bg-[#7469b6] text-white' : 'bg-white'}
                         onClick={() => setActiveTab('drafts')}>Taslaklar</button> : null}
                     {user?.interactionEnabled ? <button className={activeTab === 'interactions' ? 'bg-[#7469b6] text-white' : 'bg-white'} onClick={() => setActiveTab('interactions')}>Etkileşimler</button> : null}
                 </div>

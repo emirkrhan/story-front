@@ -81,7 +81,7 @@ function HomePage() {
                                     <div key={user.id} className='w-full h-12 flex'>
                                         <div className='w-16 h-12 flex items-center justify-center'>
                                             <img
-                                                src={user && user.id ? `${apiUrl}/uploads/${user.id}.jpg` : ""}
+                                                src={user && user.profileImage ? `${apiUrl}/uploads/${user.profileImage}` : ""}
                                                 alt="resim"
                                                 className="w-8 h-8 rounded-full"
                                             />

@@ -58,7 +58,7 @@ export default function PostView({ post }) {
       <div className="w-full h-10 flex">
         <div className="w-12 h-12 flex items-center justify-center">
           <img
-            src={data && data.profileImage ? `http://localhost:8080${data.profileImage}` : ""}
+            src={data && data.profileImage ? `${apiUrl}/uploads/${data.profileImage}` : ""}
             alt="resim"
             className="w-8 h-8 rounded-full" />
         </div>

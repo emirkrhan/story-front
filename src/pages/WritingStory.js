@@ -89,6 +89,7 @@ function WritingStory() {
       ...prevStory,
       isPublish: false
     }));
+    console.log(story)
     mutation.mutate({ ...story, isPublish: false });
   };
 
@@ -273,8 +274,8 @@ function WritingStory() {
               </div>
             ))}
           </div>
-          <button className='px-8 bg-[#7469b6] text-white' onClick={() => { mutation.mutate() }}>
-            Yayımla
+          <button className='px-8 bg-[#7469b6] text-white' onClick={() => setStoryInfo(false)}>
+            Kapat
           </button>
         </div>
       </div> : null}
