@@ -1,24 +1,44 @@
-import logo from './logo.svg';
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
+import HomePage from './pages/HomePage';
+import Stories from './pages/Stories';
+import { Fragment } from 'react';
+import WritingStory from './pages/WritingStory';
+import StoryView from './pages/StoryView';
+import ProfileEditing from './pages/ProfileEditing';
+import Categories from './pages/Categories';
+import Register from './pages/Register';
+import Login from './pages/Login';
+import Profile from './pages/Profile';
+import Interactions from './pages/Interactions';
+import Notifications from './pages/Notifications';
+import Followers from './pages/Followers';
+import Library from './pages/Library';
+import FilterTag from './pages/FilterTag';
+import FilterCategory from './pages/FilterCategory';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Fragment>
+      <Routes>
+        <Route path='/' element={<HomePage />} />
+        <Route path='/categories' element={<Categories />} />
+        <Route path='/stories' element={<Stories />} />
+        <Route path='/create' element={<WritingStory />} />
+        <Route path='/create/:storyId' element={<WritingStory />} />
+        <Route path='/notifications' element={<Notifications />} />
+        <Route path='/library' element={<Library />} />
+        <Route path='/story/:storyId' element={<StoryView />} />
+        <Route path='/profile/edit' element={<ProfileEditing />} />
+        <Route path='/register' element={<Register />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/user/:userId' element={<Profile />} />
+        <Route path='/followers/:userId' element={<Followers />} />
+        <Route path='/user/:userId/interactions' element={<Interactions />} />
+        <Route path='/tag/:tag' element={<FilterTag />} />
+        <Route path='/category/:category' element={<FilterCategory />} />
+      </Routes>
+    </Fragment>
   );
 }
 
