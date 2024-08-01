@@ -3,7 +3,7 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-
+const apiUrl = process.env.REACT_APP_API_URL;
 function Login() {
 
     const navigate = useNavigate();
@@ -13,16 +13,16 @@ function Login() {
         userPassword: "",
     });
 
-    const [passwordType, setPasswordType] = useState("password");
-    const [passwordDanger, setPasswordDanger] = useState(false);
+    // const [passwordType, setPasswordType] = useState("password");
+    // const [passwordDanger, setPasswordDanger] = useState(false);
 
-    const passwordTypeFunc = () => {
-        if (passwordType === "password") {
-            setPasswordType("text")
-        } else {
-            setPasswordType("password")
-        }
-    }
+    // const passwordTypeFunc = () => {
+    //     if (passwordType === "password") {
+    //         setPasswordType("text")
+    //     } else {
+    //         setPasswordType("password")
+    //     }
+    // }
 
     const handleChange = (e) => {
         setUser({
@@ -33,7 +33,7 @@ function Login() {
 
     const mutation = useMutation({
         mutationFn: async () => {
-            const response = await axios.post('http://localhost:8080/users/login', user);
+            const response = await axios.post(`${apiUrl}/users/login`, user);
             return response.data;
         },
         onSuccess: (data) => {

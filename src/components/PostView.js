@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import axios from "axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import "./button.css"
@@ -6,22 +6,23 @@ import sanitize from "sanitize-html";
 import categories from "./Categories";
 
 export default function PostView({ post }) {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const myUserId = localStorage.getItem('storyUserId');
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["user", post.userId],
     queryFn: () =>
       axios
-        .get(`http://localhost:8080/users/${post.user.id}`)
+        .get(`${apiUrl}/users/${post.user.id}`)
         .then((res) => res.data),
   });
 
   const mutation = useMutation({
     mutationFn: (storyId) => {
       if (saveCheck) {
-        return axios.delete('http://localhost:8080/savedstory/delete', { data: { storyId: storyId, userId: myUserId } });
+        return axios.delete(`${apiUrl}/savedstory/delete`, { data: { storyId: storyId, userId: myUserId } });
       } else {
-        return axios.post('http://localhost:8080/savedstory', { storyId: storyId, userId: myUserId });
+        return axios.post(`${apiUrl}/savedstory`, { storyId: storyId, userId: myUserId });
       }
     },
     onSuccess: () => {
@@ -32,12 +33,12 @@ export default function PostView({ post }) {
 
   const saveCheckQuery = useQuery({
     queryKey: ["saveCheck", myUserId, post.id],
-    queryFn: () => axios.get(`http://localhost:8080/savedstory/check/${myUserId}/${post.id}`).then(res => res.data),
+    queryFn: () => axios.get(`${apiUrl}/savedstory/check/${myUserId}/${post.id}`).then(res => res.data),
   });
 
   const savedCountQuery = useQuery({
     queryKey: ["savedCount", post.id],
-    queryFn: () => axios.get(`http://localhost:8080/savedstory/getCount/${post.id}`).then(res => res.data),
+    queryFn: () => axios.get(`${apiUrl}/savedstory/getCount/${post.id}`).then(res => res.data),
   });
 
   const getCategoryNameById = (id) => {

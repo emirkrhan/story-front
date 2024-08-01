@@ -6,11 +6,10 @@ import Navbar from '../components/Navbar'
 import '../components/button.css'
 import { useParams } from 'react-router-dom';
 import categories from '../components/Categories';
-
+const apiUrl = process.env.REACT_APP_API_URL;
 function FilterCategory() {
 
     const { category } = useParams();
-    const username = localStorage.getItem('storyUserName');
 
     const getCategoryNameById = (id) => {
         const category = categories.find(cat => cat.id === id);
@@ -20,7 +19,7 @@ function FilterCategory() {
 
     const { data: stories, isLoading: storiesLoading, error: storiesError } = useQuery({
         queryKey: ['filter-category', category],
-        queryFn: () => axios.get(`http://localhost:8080/stories/getAllStoryByCategory/${category}`).then(res => res.data)
+        queryFn: () => axios.get(`${apiUrl}/stories/getAllStoryByCategory/${category}`).then(res => res.data)
     });
 
     if (storiesLoading) return <div><span className="loader"></span></div>;

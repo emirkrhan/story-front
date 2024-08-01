@@ -7,13 +7,13 @@ import '../components/button.css'
 import { useParams } from 'react-router-dom';
 
 function FilterTag() {
-
+    
+    const apiUrl = process.env.REACT_APP_API_URL;
     const { tag } = useParams();
-    const username = localStorage.getItem('storyUserName');
 
     const { data: stories, isLoading: storiesLoading, error: storiesError } = useQuery({
         queryKey: ['filter-tag', tag],
-        queryFn: () => axios.get(`http://localhost:8080/stories/getAllStoryByTag/${tag}`).then(res => res.data)
+        queryFn: () => axios.get(`${apiUrl}/stories/getAllStoryByTag/${tag}`).then(res => res.data)
     });
 
     if (storiesLoading) return <div><span className="loader"></span></div>;

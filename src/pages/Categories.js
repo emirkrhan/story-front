@@ -19,22 +19,3 @@ function Categories() {
 }
 
 export default Categories
-
-{/* <div className='bg-white h-80 border rounded shadow  p-4'>
-            <div className='w-full h-32 bg-cat1 bg-cover rounded bg-no-repeat bg-right'></div>
-            <div className='w-full py-6 text-xl font-bold flex items-center justify-center'>{cat.categoryName}</div>
-
-            <div className='w-full flex items-center justify-center'>
-              <div className='w-24 h-auto flex flex-col items-center justify-center border-r border-gray-300 text-sm'>
-                <button className='font text-lg font-medium px-4'>3</button>Toplam Hikaye
-              </div>
-
-              <div className='w-24 h-auto flex flex-col items-center justify-center text-sm'>
-                <button className='font text-lg font-medium px-4'>200</button>Yazar
-              </div>
-            </div>
-
-            <div className='w-full py-2 flex items-center justify-center'>
-              <div className='px-4 py-1 rounded-full bg-[#7469b6] text-white text-xs font-medium'>Popüler</div>
-            </div>
-          </div> */}

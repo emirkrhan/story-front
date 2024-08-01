@@ -3,9 +3,8 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom';
 import PostView from '../components/PostView';
-import Interactions from './Interactions';
 import Navbar from '../components/Navbar';
-
+const apiUrl = process.env.REACT_APP_API_URL;
 function Followers() {
 
     const { userId } = useParams();
@@ -13,49 +12,55 @@ function Followers() {
     const [activeTab, setActiveTab] = useState("stories")
 
 
-    const { data: user, isLoading: userLoading, error: userError } = useQuery({
+    const userQuery = useQuery({
         queryKey: ["user", userId],
-        queryFn: () => axios.get(`http://localhost:8080/users/${userId}`).then(res => res.data)
+        queryFn: () => axios.get(`${apiUrl}/users/${userId}`).then(res => res.data)
     });
 
-    const { data: follower, isLoading: followerLoading, error: followerError } = useQuery({
-        queryKey: ["follower", userId],
-        queryFn: () => axios.get(`http://localhost:8080/follows/follower/${userId}`).then(res => res.data)
-    });
+    // const followerQuery = useQuery({
+    //     queryKey: ["follower", userId],
+    //     queryFn: () => axios.get(`${apiUrl}/follows/follower/${userId}`).then(res => res.data)
+    // });
 
-    const { data: followed, isLoading: followedLoading, error: followedError } = useQuery({
-        queryKey: ["followed", userId],
-        queryFn: () => axios.get(`http://localhost:8080/follows/followed/${userId}`).then(res => res.data)
-    });
+    // const followedQuery = useQuery({
+    //     queryKey: ["followed", userId],
+    //     queryFn: () => axios.get(`${apiUrl}/follows/followed/${userId}`).then(res => res.data)
+    // });
 
-    const { data: followerCount, isLoading: followerCountLoading, error: followerCountError } = useQuery({
+    const followerCountQuery = useQuery({
         queryKey: ["followerCount", userId],
-        queryFn: () => axios.get(`http://localhost:8080/follows/followerCount/${userId}`).then(res => res.data)
+        queryFn: () => axios.get(`${apiUrl}/follows/followerCount/${userId}`).then(res => res.data)
     });
 
     const followedCountQuery = useQuery({
         queryKey: ["followedCount", userId],
-        queryFn: () => axios.get(`http://localhost:8080/follows/followedCount/${userId}`).then(res => res.data)
+        queryFn: () => axios.get(`${apiUrl}/follows/followedCount/${userId}`).then(res => res.data)
     });
 
-    const followedCount = followedCountQuery.data;
-
-    const { data: posts, isLoading: postsLoading, error: postsError } = useQuery({
+    const postsQuery = useQuery({
         queryKey: ["stories", userId],
-        queryFn: () => axios.get(`http://localhost:8080/stories/getUserStory/${userId}`).then(res => res.data)
+        queryFn: () => axios.get(`${apiUrl}/stories/getUserStory/${userId}`).then(res => res.data)
     });
 
     const followCheckQuery = useQuery({
         queryKey: ["followCheck", myUserId, userId],
-        queryFn: () => axios.get(`http://localhost:8080/follows/followCheck/${myUserId}/${userId}`).then(res => res.data)
+        queryFn: () => axios.get(`${apiUrl}/follows/followCheck/${myUserId}/${userId}`).then(res => res.data)
     });
 
     const followCheck = followCheckQuery.data;
 
-    const { data: interactions, isLoading: interactionsLoading, error: interactionsError } = useQuery({
+    const interactionsQuery = useQuery({
         queryKey: ["interactions", userId],
-        queryFn: () => axios.get(`http://localhost:8080/users/getUserInteractions/${userId}`).then(res => res.data)
+        queryFn: () => axios.get(`${apiUrl}/users/getUserInteractions/${userId}`).then(res => res.data)
     });
+
+    const followedCount = followedCountQuery.data;
+    const followerCount = followerCountQuery.data;
+    const posts = postsQuery.data;
+    const interactions = interactionsQuery.data;
+    const user = userQuery.data;
+    // const follower = followerQuery.data;
+    // const followed = followedQuery.data;
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -74,9 +79,9 @@ function Followers() {
     const mutationFollow = useMutation({
         mutationFn: () => {
             if (followCheck) {
-                return axios.delete('http://localhost:8080/follows/unfollow', { data: { followerId: myUserId, followedId: userId } });
+                return axios.delete(`${apiUrl}/follows/unfollow`, { data: { followerId: myUserId, followedId: userId } });
             } else {
-                return axios.post(`http://localhost:8080/follows?followerId=${myUserId}&followedId=${userId}&size=5`)
+                return axios.post(`${apiUrl}/follows?followerId=${myUserId}&followedId=${userId}&size=5`)
             }
         },
         onSuccess: () => {
@@ -93,7 +98,7 @@ function Followers() {
             <div className='w-1/3 h-auto pl-28 pt-10 flex flex-col gap-2'>
                 <div className='w-full h-auto flex flex-col rounded-lg bg-white py-4'>
                     <div className='w-full py-2 flex items-center justify-center'>
-                        <img src={`http://localhost:8080/uploads/${userId}.jpg`} alt="profile" className='w-20 h-20 rounded-full object-cover' />
+                        <img src={`${apiUrl}/uploads/${userId}.jpg`} alt="profile" className='w-20 h-20 rounded-full object-cover' />
                     </div>
 
                     <div className='w-full py-2 flex items-center justify-center before:content-["@"] text-sm font-medium'>

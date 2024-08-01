@@ -1,29 +1,32 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import PostView from '../components/PostView';
 import Navbar from '../components/Navbar'
 import '../components/button.css'
 import ImageCarousel from '../components/ImageCarousel';
-
+const apiUrl = process.env.REACT_APP_API_URL;
 function HomePage() {
 
 
-    const { data: users, isLoading: usersLoading, error: usersError } = useQuery({
+    const usersQuery = useQuery({
         queryKey: ['random-users'],
-        queryFn: () => axios.get('http://localhost:8080/users/randomUsers').then(res => res.data)
+        queryFn: () => axios.get(`${apiUrl}/users/randomUsers`).then(res => res.data)
     });
 
 
     const { data: posts, isLoading: postsLoading, error: postsError } = useQuery({
         queryKey: ["posts"],
-        queryFn: () => axios.get('http://localhost:8080/stories').then(res => res.data)
+        queryFn: () => axios.get(`${apiUrl}/stories`).then(res => res.data)
     });
 
-    const { data: topTags, isLoading: topTagsLoading, error: topTagsError } = useQuery({
+    const topTagsQuery = useQuery({
         queryKey: ["toptags"],
-        queryFn: () => axios.get('http://localhost:8080/stories/top-tags').then(res => res.data)
+        queryFn: () => axios.get(`${apiUrl}/stories/top-tags`).then(res => res.data)
     });
+
+    const topTags = topTagsQuery.data;
+    const users = usersQuery.data;
 
     if (postsLoading) return <div><span className="loader"></span></div>;
     if (postsError) return <div>An error occurred: {postsError.message}</div>;
@@ -78,7 +81,7 @@ function HomePage() {
                                     <div key={user.id} className='w-full h-12 flex'>
                                         <div className='w-16 h-12 flex items-center justify-center'>
                                             <img
-                                                src={user && user.id ? `http://localhost:8080/uploads/${user.id}.jpg` : ""}
+                                                src={user && user.id ? `${apiUrl}/uploads/${user.id}.jpg` : ""}
                                                 alt="resim"
                                                 className="w-8 h-8 rounded-full"
                                             />

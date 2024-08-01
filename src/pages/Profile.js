@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import PostView from '../components/PostView';
 import Navbar from '../components/Navbar';
 import sanitize from 'sanitize-html';
-
+const apiUrl = process.env.REACT_APP_API_URL;
 function Profile() {
 
     const { userId } = useParams();
@@ -17,58 +17,68 @@ function Profile() {
     })
 
 
-    const { data: user, isLoading: userLoading, error: userError } = useQuery({
+    const userQuery = useQuery({
         queryKey: ["user", userId],
-        queryFn: () => axios.get(`http://localhost:8080/users/${userId}`).then(res => res.data)
+        queryFn: () => axios.get(`${apiUrl}/users/${userId}`).then(res => res.data)
     });
 
-    const { data: follower, isLoading: followerLoading, error: followerError } = useQuery({
-        queryKey: ["follower", userId],
-        queryFn: () => axios.get(`http://localhost:8080/follows/follower/${userId}`).then(res => res.data)
-    });
+    const user = userQuery.data;
+
+    // const { data: follower, isLoading: followerLoading, error: followerError } = useQuery({
+    //     queryKey: ["follower", userId],
+    //     queryFn: () => axios.get(`${apiUrl}/follows/follower/${userId}`).then(res => res.data)
+    // });
 
 
-    const { data: followerCount, isLoading: followerCountLoading, error: followerCountError } = useQuery({
+    const followerCountQuery = useQuery({
         queryKey: ["followerCount", userId],
-        queryFn: () => axios.get(`http://localhost:8080/follows/followerCount/${userId}`).then(res => res.data)
+        queryFn: () => axios.get(`${apiUrl}/follows/followerCount/${userId}`).then(res => res.data)
     });
+
+    const followerCount = followerCountQuery.data;
 
     const followedCountQuery = useQuery({
         queryKey: ["followedCount", userId],
-        queryFn: () => axios.get(`http://localhost:8080/follows/followedCount/${userId}`).then(res => res.data)
+        queryFn: () => axios.get(`${apiUrl}/follows/followedCount/${userId}`).then(res => res.data)
     });
 
     const followedCount = followedCountQuery.data;
 
-    const { data: posts, isLoading: postsLoading, error: postsError } = useQuery({
+    const postsQuery = useQuery({
         queryKey: ["stories", userId],
-        queryFn: () => axios.get(`http://localhost:8080/stories/getUserStoryIsPublish/${userId}`).then(res => res.data)
+        queryFn: () => axios.get(`${apiUrl}/stories/getUserStoryIsPublish/${userId}`).then(res => res.data)
     });
 
-    const { data: drafts, isLoading: draftsLoading, error: draftsError } = useQuery({
+    const posts = postsQuery.data;
+
+    const draftsQuery = useQuery({
         queryKey: ["drafts", userId],
-        queryFn: () => axios.get(`http://localhost:8080/stories/getUserStoryIsDraft/${userId}`).then(res => res.data)
+        queryFn: () => axios.get(`${apiUrl}/stories/getUserStoryIsDraft/${userId}`).then(res => res.data)
     });
+
+    const drafts = draftsQuery.data;
 
     const followCheckQuery = useQuery({
         queryKey: ["followCheck", myUserId, userId],
-        queryFn: () => axios.get(`http://localhost:8080/follows/followCheck/${myUserId}/${userId}`).then(res => res.data)
+        queryFn: () => axios.get(`${apiUrl}/follows/followCheck/${myUserId}/${userId}`).then(res => res.data)
     });
 
     const followCheck = followCheckQuery.data;
 
-    const { data: interactions, isLoading: interactionsLoading, error: interactionsError } = useQuery({
+    const interactionsQuery = useQuery({
         queryKey: ["interactions", userId],
-        queryFn: () => axios.get(`http://localhost:8080/users/getUserInteractions/${userId}`).then(res => res.data)
+        queryFn: () => axios.get(`${apiUrl}/users/getUserInteractions/${userId}`).then(res => res.data)
     });
+
+    const interactions = interactionsQuery.data;
 
     const followersQuery = useQuery({
         queryKey: [followDiv.name === "followers" ? "followers" : "following", userId],
         queryFn: () => {
             if (followDiv.name === "followers") {
-                return axios.get(`http://localhost:8080/follows/followed/${userId}/${myUserId}`).then(res => res.data);
+                return axios.get(`${apiUrl}/follows/followed/${userId}/${myUserId}`).then(res => res.data);
             } else {
-                return axios.get(`http://localhost:8080/follows/follower/${userId}/${myUserId}`).then(res => res.data);
+                return axios.get(`${apiUrl}/follows/follower/${userId}/${myUserId}`).then(res => res.data);
             }
         },
         enabled: followDiv.value
@@ -106,9 +116,9 @@ function Profile() {
     const mutationFollow = useMutation({
         mutationFn: ({ myUserId, userId, followCheck }) => {
             if (followCheck) {
-                return axios.delete('http://localhost:8080/follows/unfollow', { data: { followerId: myUserId, followedId: userId } });
+                return axios.delete(`${apiUrl}/follows/unfollow`, { data: { followerId: myUserId, followedId: userId } });
             } else {
-                return axios.post(`http://localhost:8080/follows?followerId=${myUserId}&followedId=${userId}&size=5`)
+                return axios.post(`${apiUrl}/follows?followerId=${myUserId}&followedId=${userId}&size=5`)
             }
         },
         onSuccess: () => {
@@ -134,7 +144,7 @@ function Profile() {
             <div className='w-1/3 h-auto pl-28 pt-10 flex flex-col gap-2'>
                 <div className='w-full h-auto flex flex-col rounded-lg bg-white py-4'>
                     <div className='w-full py-2 flex items-center justify-center'>
-                        <img src={`http://localhost:8080/uploads/${userId}.jpg`} alt="profile" className='w-20 h-20 rounded-full object-cover' />
+                        <img src={`${apiUrl}/uploads/${userId}.jpg`} alt="profile" className='w-20 h-20 rounded-full object-cover' />
                     </div>
 
                     <div className='w-full py-2 flex items-center justify-center before:content-["@"] text-sm font-medium'>
@@ -219,7 +229,7 @@ function Profile() {
                             <div key={follower.followerId} className='w-full h-12 flex'>
                                 <div className='w-16 h-12 flex items-center justify-center'>
                                     <img
-                                        src={followDiv.name === 'followers' ? `http://localhost:8080/uploads/${follower.followerId}.jpg` : `http://localhost:8080/uploads/${follower.followedId}.jpg`}
+                                        src={followDiv.name === 'followers' ? `${apiUrl}/uploads/${follower.followerId}.jpg` : `${apiUrl}/uploads/${follower.followedId}.jpg`}
                                         alt="resim"
                                         className="w-8 h-8 rounded-full"
                                     />

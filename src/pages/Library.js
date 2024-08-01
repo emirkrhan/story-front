@@ -2,14 +2,14 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import React from 'react'
 import PostView from '../components/PostView';
-
+const apiUrl = process.env.REACT_APP_API_URL;
 function Library() {
 
     const myUserId = localStorage.getItem('storyUserId');
 
     const libraryQuery = useQuery({
         queryKey: ["library", myUserId],
-        queryFn: () => axios.get(`http://localhost:8080/savedstory/${myUserId}`).then(res => res.data)
+        queryFn: () => axios.get(`${apiUrl}/savedstory/${myUserId}`).then(res => res.data)
     });
 
     const library = libraryQuery.data;

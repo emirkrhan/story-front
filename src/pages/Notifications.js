@@ -2,14 +2,14 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import React from 'react'
 import Navbar from '../components/Navbar';
-
+const apiUrl = process.env.REACT_APP_API_URL;
 function Notifications() {
 
     const myUserId = localStorage.getItem('storyUserId');
 
     const notificationsQuery = useQuery({
         queryKey: ["notifications", myUserId],
-        queryFn: () => axios.get(`http://localhost:8080/notifications/getUserNotify/${myUserId}`).then(res => res.data)
+        queryFn: () => axios.get(`${apiUrl}/notifications/getUserNotify/${myUserId}`).then(res => res.data)
     });
 
     const notifications = notificationsQuery.data;
@@ -57,7 +57,7 @@ function Notifications() {
                     <div className={`w-10/12 py-2 px-4 shadow-md border bg-white rounded-e-lg cursor-pointer hover:shadow-xl hover:scale-[1.01] ${notify.read ? 'rounded-s-lg border-gray-300' : 'border-l-4 border-[#7469b6]'}`} key={notify.id}>
                         <div className='w-full flex py-2'>
                             <div className='px-4 h-auto'>
-                                <img src={`http://localhost:8080/uploads/${notify.reporting.id}.jpg`} alt="profile" className='w-6 h-6 rounded-full object-cover' />
+                                <img src={`${apiUrl}/uploads/${notify.reporting.id}.jpg`} alt="profile" className='w-6 h-6 rounded-full object-cover' />
                             </div>
                             <div className='flex-1 flex items-center'>{renderNotificationMessage(notify)}</div>
                             <div className='px-4 h-auto text-xs font-semibold'>

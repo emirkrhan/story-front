@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import categories from '../components/Categories';
-
+const apiUrl = process.env.REACT_APP_API_URL;
 function WritingStory() {
 
   const userId = localStorage.getItem('storyUserId');
@@ -28,9 +28,11 @@ function WritingStory() {
 
   const { data: fetchStory, isLoading: storyLoading, error: storyError, isSuccess: storyIsSuccess } = useQuery({
     queryKey: ["fetchStory", storyId],
-    queryFn: () => axios.get(`http://localhost:8080/stories/${storyId}`).then(res => res.data),
+    queryFn: () => axios.get(`${apiUrl}/stories/${storyId}`).then(res => res.data),
     enabled: !!storyId,
   });
+
+
 
   useEffect(() => {
     if (storyIsSuccess && fetchStory) {
@@ -100,7 +102,7 @@ function WritingStory() {
 
   const mutation = useMutation({
     mutationFn: (updatedStory) => {
-      return axios.post('http://localhost:8080/stories/create', updatedStory)
+      return axios.post(`${apiUrl}/stories/create`, updatedStory)
     },
   });
 
@@ -136,6 +138,9 @@ function WritingStory() {
       category: id
     }));
   };
+
+  if (storyLoading) return <div>Loading...</div>
+  if (storyError) return <div>Error: {storyError.message}</div>;
 
   return (
     <div className='w-full h-auto min-h-screen flex pt-16'>

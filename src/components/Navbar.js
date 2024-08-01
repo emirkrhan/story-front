@@ -1,16 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { GoHome } from "react-icons/go";
-import { GoBook } from "react-icons/go";
 import { GoListOrdered } from "react-icons/go";
-import { GoBell } from "react-icons/go";
-import { GoGear } from "react-icons/go";
-import { GoPlus } from "react-icons/go";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import ProgressBar from "./ProgressBar";
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 function Navbar({ progressBar, animation }) {
+    
     const [dropDownMenu, setDropDownMenu] = useState(false);
     const userId = localStorage.getItem('storyUserId');
     const navigate = useNavigate();
@@ -109,7 +108,7 @@ function Navbar({ progressBar, animation }) {
 
     const { data: userPhoto, isLoading: userPhotoLoading, error: userPhotoError } = useQuery({
         queryKey: ["userPhoto"],
-        queryFn: () => axios.get(`http://localhost:8080/users/getUserProfilePhotos/${userId}`).then(res => res.data)
+        queryFn: () => axios.get(`${apiUrl}/users/getUserProfilePhotos/${userId}`).then(res => res.data)
     });
 
     const [isScrolled, setIsScrolled] = useState(false);
@@ -129,6 +128,9 @@ function Navbar({ progressBar, animation }) {
             window.removeEventListener('scroll', handleScroll);
         };
     }, []);
+
+    if (userPhotoLoading) return <div>Loading...</div>;
+    if (userPhotoError) return <div>Error: {userPhotoError.message}</div>;
 
     return (
         <div className="w-full h-auto fixed bg-white top-0 left-0 z-30 shadow">

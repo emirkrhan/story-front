@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-
+const apiUrl = process.env.REACT_APP_API_URL;
 function Register() {
 
     const navigate = useNavigate();
@@ -15,16 +15,16 @@ function Register() {
         biography: ""
     });
 
-    const [passwordType, setPasswordType] = useState("password");
-    const [passwordDanger, setPasswordDanger] = useState(false);
+    // const [passwordType, setPasswordType] = useState("password");
+    // const [passwordDanger, setPasswordDanger] = useState(false);
 
-    const passwordTypeFunc = () => {
-        if (passwordType === "password") {
-            setPasswordType("text")
-        } else {
-            setPasswordType("password")
-        }
-    }
+    // const passwordTypeFunc = () => {
+    //     if (passwordType === "password") {
+    //         setPasswordType("text")
+    //     } else {
+    //         setPasswordType("password")
+    //     }
+    // }
 
     const handleChange = (e) => {
         setUser({
@@ -35,7 +35,7 @@ function Register() {
 
     const mutation = useMutation({
         mutationFn: () => {
-            return axios.post('http://localhost:8080/users/register', user);
+            return axios.post(`${apiUrl}/users/register`, user);
         },
         onSuccess: () => {
             navigate('/login');

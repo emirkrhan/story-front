@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 
 function Comment({ comment, userId, storyWriterId }) {
 
+    const apiUrl = process.env.REACT_APP_API_URL;
     const commentId = comment.id;
     const menuRef = useRef(null);
     const buttonRef = useRef(null);
@@ -66,7 +67,7 @@ function Comment({ comment, userId, storyWriterId }) {
 
     const mutationReplyComment = useMutation({
         mutationFn: (commentId) => {
-            return axios.post(`http://localhost:8080/commentsreply/${commentId}`, commentReply)
+            return axios.post(`${apiUrl}/commentsreply/${commentId}`, commentReply)
         },
         onSuccess: () => {
             commentReplyInfiniteQuery.refetch();
@@ -93,7 +94,7 @@ function Comment({ comment, userId, storyWriterId }) {
 
     const fetchCommentReply = async ({ pageParam }) => {
 
-        const response = await axios.get(`http://localhost:8080/comments/gett/commentReply?commentId=${commentId}&page=${pageParam}&size=3`);
+        const response = await axios.get(`${apiUrl}/comments/gett/commentReply?commentId=${commentId}&page=${pageParam}&size=3`);
         return response.data;
     };
 

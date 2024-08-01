@@ -1,14 +1,13 @@
 import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import sanitize from 'sanitize-html';
 import Comment from '../components/Comment';
 import SocialShare from '../components/SocialShare';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
-
+const apiUrl = process.env.REACT_APP_API_URL;
 function StoryView() {
 
   const { storyId } = useParams();
@@ -31,7 +30,7 @@ function StoryView() {
 
   const mutation = useMutation({
     mutationFn: () => {
-      return axios.post('http://localhost:8080/stories/readCount', { storyId: storyId })
+      return axios.post(`${apiUrl}/stories/readCount`, { storyId: storyId })
     },
   })
 
@@ -41,7 +40,7 @@ function StoryView() {
 
   const { data: story, isLoading: storyLoading, error: storyError, isSuccess: storyIsSuccess } = useQuery({
     queryKey: ["story"],
-    queryFn: () => axios.get(`http://localhost:8080/stories/${storyId}`).then(res => res.data),
+    queryFn: () => axios.get(`${apiUrl}/stories/${storyId}`).then(res => res.data),
   });
 
   useEffect(() => {
@@ -52,14 +51,15 @@ function StoryView() {
 
       return () => clearTimeout(timeout);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [storyIsSuccess]);
 
   const mutation2 = useMutation({
     mutationFn: () => {
       if (likeCheck) {
-        return axios.delete('http://localhost:8080/likes/delete', { data: { storyId: storyId, userId: userId } });
+        return axios.delete(`${apiUrl}/likes/delete`, { data: { storyId: storyId, userId: userId } });
       } else {
-        return axios.post('http://localhost:8080/likes', { userId: userId, storyId: storyId });
+        return axios.post(`${apiUrl}/likes`, { userId: userId, storyId: storyId });
       }
     },
     onSuccess: () => {
@@ -69,11 +69,11 @@ function StoryView() {
 
   const likeCheckQuery = useQuery({
     queryKey: ["likeCheck", userId, storyId],
-    queryFn: () => axios.get(`http://localhost:8080/likes/check/${userId}/${storyId}`).then(res => res.data),
+    queryFn: () => axios.get(`${apiUrl}/likes/check/${userId}/${storyId}`).then(res => res.data),
   });
 
   const fetchComments = async ({ pageParam }) => {
-    const response = await axios.get(`http://localhost:8080/comments/gett?storyId=${storyId}&page=${pageParam}&size=5`);
+    const response = await axios.get(`${apiUrl}/comments/gett?storyId=${storyId}&page=${pageParam}&size=5`);
     return response.data;
   };
 
@@ -87,7 +87,7 @@ function StoryView() {
 
   const mutationComment = useMutation({
     mutationFn: () => {
-      return axios.post('http://localhost:8080/comments', comment)
+      return axios.post(`${apiUrl}/comments`, comment)
     },
     onSuccess: () => {
       commentInfiniteQuery.refetch();
@@ -103,7 +103,6 @@ function StoryView() {
   const isFetchingNextPage = commentInfiniteQuery.isFetchingNextPage;
   const comm = commentInfiniteQuery.data
   const likeCheck = likeCheckQuery.data;
-  const clean = sanitize(story?.storyText);
   const commentCount = comm?.pages[0]?.commentCount;
 
   if (storyLoading) return <div>Loading...</div>;
