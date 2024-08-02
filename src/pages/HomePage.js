@@ -80,11 +80,13 @@ function HomePage() {
                                 users.map(user => (
                                     <div key={user.id} className='w-full h-12 flex'>
                                         <div className='w-16 h-12 flex items-center justify-center'>
-                                            <img
-                                                src={user && user.profileImage ? `${apiUrl}/uploads/${user.profileImage}` : ""}
-                                                alt="resim"
-                                                className="w-8 h-8 rounded-full"
-                                            />
+                                            <a href={`/user/${user.id}`}>
+                                                <img
+                                                    src={user && user.profileImage ? `${apiUrl}/uploads/${user.profileImage}` : ""}
+                                                    alt="resim"
+                                                    className="w-8 h-8 rounded-full"
+                                                />
+                                            </a>
                                         </div>
                                         <div className='w-44 h-12'>
                                             <div className='w-44 h-6 flex items-end text-sm font-semibold'>{user.fullName}</div>

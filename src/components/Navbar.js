@@ -9,7 +9,7 @@ import ProgressBar from "./ProgressBar";
 const apiUrl = process.env.REACT_APP_API_URL;
 
 function Navbar({ progressBar, animation }) {
-    
+
     const [dropDownMenu, setDropDownMenu] = useState(false);
     const userId = localStorage.getItem('storyUserId');
     const navigate = useNavigate();
@@ -52,11 +52,19 @@ function Navbar({ progressBar, animation }) {
             case "Profilim":
                 navigate(`/user/${userId}`);
                 break;
-            case "Kategoriler":
-                navigate("/categories");
-                break;
             case "Kitaplığım":
                 navigate("/library");
+                break;
+            case "Yardım":
+                navigate("/help");
+                break;
+            case "Ayarlar":
+                navigate("/settings");
+                break;
+            case "Çıkış Yap":
+                localStorage.removeItem('storyUserId');
+                localStorage.removeItem('storyUserName');
+                navigate("/login");
                 break;
             default:
                 break;
@@ -165,7 +173,7 @@ function Navbar({ progressBar, animation }) {
                     </div>
                     <div className="relative">
                         <div ref={buttonRef} className="pl-4 pr-12 h-20 flex items-center cursor-pointer" onClick={openProfileDropDownMenu}>
-                            <img src={`${apiUrl}/uploads/${userPhoto}`} alt="Profile Photos" className="w-8 h-8 rounded-full ring-offset-2 ring-2 ring-[#7469b6]" />
+                            <img src={`${apiUrl}/uploads/${userPhoto}`} alt="Profile Photos" className="w-10 h-10 rounded-full" />
                             <i className="fa-solid fa-angle-down px-4"></i>
                         </div>
                         {dropDownMenu ? (

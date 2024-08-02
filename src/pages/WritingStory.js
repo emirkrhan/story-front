@@ -2,15 +2,17 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import '../App.css';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import categories from '../components/Categories';
 const apiUrl = process.env.REACT_APP_API_URL;
+
 function WritingStory() {
 
   const userId = localStorage.getItem('storyUserId');
   const { storyId } = useParams();
+  const navigate = useNavigate();
   const [storyInfo, setStoryInfo] = useState(false);
   const [showCategoryInfo, setShowCategoryInfo] = useState(false);
   const [story, setStory] = useState({
@@ -105,6 +107,9 @@ function WritingStory() {
     mutationFn: (updatedStory) => {
       return axios.post(`${apiUrl}/stories/create`, updatedStory)
     },
+    onSuccess: (data) => {
+      navigate(`/story/${data.data.id}`)
+    }
   });
 
   const handleTagChange = (e) => {

@@ -1,8 +1,8 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
 import HomePage from './pages/HomePage';
 import Stories from './pages/Stories';
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 import WritingStory from './pages/WritingStory';
 import StoryView from './pages/StoryView';
 import ProfileEditing from './pages/ProfileEditing';
@@ -18,6 +18,16 @@ import FilterTag from './pages/FilterTag';
 import FilterCategory from './pages/FilterCategory';
 
 function App() {
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const user = localStorage.getItem('storyUserId');
+    if (!user) {
+      navigate('/login');
+    }
+  }, [navigate]);
+
   return (
     <Fragment>
       <Routes>
@@ -33,6 +43,7 @@ function App() {
         <Route path='/register' element={<Register />} />
         <Route path='/login' element={<Login />} />
         <Route path='/user/:userId' element={<Profile />} />
+        <Route path='/user/edit/profile/:userId' element={<ProfileEditing />} />
         <Route path='/followers/:userId' element={<Followers />} />
         <Route path='/user/:userId/interactions' element={<Interactions />} />
         <Route path='/tag/:tag' element={<FilterTag />} />
