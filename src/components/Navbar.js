@@ -115,7 +115,7 @@ function Navbar({ progressBar, animation }) {
 
 
     const { data: userPhoto, isLoading: userPhotoLoading, error: userPhotoError } = useQuery({
-        queryKey: ["userPhoto"],
+        queryKey: ["userPhoto", userId],
         queryFn: () => axios.get(`${apiUrl}/users/getUserProfilePhotos/${userId}`).then(res => res.data)
     });
 
