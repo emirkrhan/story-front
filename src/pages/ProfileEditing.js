@@ -23,6 +23,7 @@ function ProfileEditing() {
 
   const [editProfile, setEditProfile] = useState({
     userName: "",
+    fullName: "",
     biography: "",
     website: "",
     interactionEnabled: false
@@ -31,6 +32,7 @@ function ProfileEditing() {
     if (userSuccess && user) {
       setEditProfile({
         userName: user.userName,
+        fullName: user.fullName,
         biography: user.biography,
         website: user.website,
         interactionEnabled: user.interactionEnabled
@@ -75,6 +77,18 @@ function ProfileEditing() {
             onChange={handleChange}
             type="text"
             placeholder="username"
+            className="mt-2 h-10 px-4 w-full outline-none rounded-md shadow-sm text-sm"
+          />
+        </div>
+        <div className='w-60 py-2'>
+          <label htmlFor="UserName" className="block text-sm font-medium text-gray-700"> Tam ad </label>
+          <input
+            name="fullName"
+            value={editProfile.fullName}
+            id='fullName'
+            onChange={handleChange}
+            type="text"
+            placeholder="fullName"
             className="mt-2 h-10 px-4 w-full outline-none rounded-md shadow-sm text-sm"
           />
         </div>

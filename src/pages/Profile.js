@@ -16,8 +16,6 @@ function Profile() {
         name: 'followers'
     })
 
-
-
     const userQuery = useQuery({
         queryKey: ["user", userId],
         queryFn: () => axios.get(`${apiUrl}/users/${userId}`).then(res => res.data)
