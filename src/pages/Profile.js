@@ -208,10 +208,10 @@ function Profile() {
                             required />
                         <img src={`${apiUrl}/uploads/${userId}.jpg`} alt="profile" className='w-20 h-20 rounded-full object-cover' />
                     </div> */}
-                    <div className='w-full py-2 flex items-center justify-center text-base font-semibold'>
+                    <div className='w-full pt-2 flex items-center justify-center text-lg font-semibold'>
                         {user?.fullName}
                     </div>
-                    <div className='w-full py-2 flex items-center justify-center before:content-["@"] text-sm font-medium'>
+                    <div className='w-full pb-2 pt-1 flex items-center justify-center before:content-["@"] text-sm font-medium'>
                         {user?.userName}
                     </div>
                     <div className='w-full flex items-center justify-center py-4'>
