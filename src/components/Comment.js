@@ -170,7 +170,7 @@ function Comment({ comment, userId, storyWriterId }) {
                                         <div key={reply.id} className='w-full px-4 py-2 bg-gray-100 rounded-lg mb-2'>
                                             <div className='w-full flex items-center'>
                                                 <div className='w-1/12 h-8 flex items-center justify-center'>
-                                                    <img src={`http://localhost:8080/uploads/${reply.user.id}.jpg`} alt="profile pht" className='w-6 h-6 rounded-full' />
+                                                    <img src={`${apiUrl}/uploads/${reply.user.id}`} alt="profile pht" className='w-6 h-6 rounded-full' />
                                                 </div>
                                                 <div className='flex-1 h-8 font-semibold text-xs flex items-center'>@{reply.user.userName}</div>
                                                 <div className='px-2 h-8 font-medium text-xs flex items-center'>{formatDate(reply.replyTime)}</div>
