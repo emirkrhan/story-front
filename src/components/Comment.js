@@ -1,6 +1,7 @@
-import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react'
+import CommentReply from './CommentReply';
 
 function Comment({ comment, userId, storyWriterId }) {
 
@@ -102,17 +103,14 @@ function Comment({ comment, userId, storyWriterId }) {
         getNextPageParam: (lastPage) => lastPage.nextPage,
     });
 
-    const userPhotoQuery = useQuery({
-        queryKey: ["userPhoto", userId],
-        queryFn: () => axios.get(`${apiUrl}/users/getUserProfilePhotos/${userId}`).then(res => res.data)
-    });
+    
 
     const fetchNextPage = commentReplyInfiniteQuery.fetchNextPage;
     const hasNextPage = commentReplyInfiniteQuery.hasNextPage;
     const isFetchingNextPage = commentReplyInfiniteQuery.isFetchingNextPage;
     const replies = commentReplyInfiniteQuery.data;
     const commentReplyCount = replies?.pages[0]?.commentCount;
-    const userPhoto = userPhotoQuery.data;
+    
 
     return (
         <div key={comment.id} className='w-full h-auto bg-white rounded-lg'>
@@ -173,16 +171,7 @@ function Comment({ comment, userId, storyWriterId }) {
                             {replies?.pages.map((page, pageIndex) => (
                                 <div key={pageIndex}>
                                     {page.dataReply.map((reply) => (
-                                        <div key={reply.id} className='w-full px-4 py-2 bg-gray-100 rounded-lg mb-2'>
-                                            <div className='w-full flex items-center'>
-                                                <div className='w-1/12 h-8 flex items-center justify-center'>
-                                                    <img src={`${apiUrl}/uploads/${userPhoto}`} alt="profile pht" className='w-6 h-6 rounded-full' />
-                                                </div>
-                                                <div className='flex-1 h-8 font-semibold text-xs flex items-center'>@{reply.user.userName}</div>
-                                                <div className='px-2 h-8 font-medium text-xs flex items-center'>{formatDate(reply.replyTime)}</div>
-                                            </div>
-                                            <div className='w-full px-8 font-light text-xs'>{reply.replyText}</div>
-                                        </div>
+                                        <CommentReply reply={reply} replyUserId={reply.user.id}/>
                                     ))}
 
                                 </div>
