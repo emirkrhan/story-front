@@ -264,10 +264,10 @@ function Profile() {
                 ) : null}
                 {activeTab === 'interactions' ? interactions?.map((int, index) => (
                     <div key={index} className='w-11/12 py-4 bg-white rounded-lg mb-4 flex items-center'>
-                        <div className='px-6 flex items-center justify-center'><i class={`fa-solid ${int.type === 'LIKE' ? 'fa-heart text-red-500' : (int.type === 'COMMENT' ? 'fa-comment text-blue-500' : 'fa-user-plus text-green-500')}`}></i></div>
+                        <div className='px-6 flex items-center justify-center'><i class={`fa-solid ${int.type === 'LIKE' ? 'fa-heart text-red-500' : (int.type === 'COMMENT' ? 'fa-comment text-blue-500' : (int.type === 'FOLLOW' ? 'fa-user-plus text-green-500' : 'fa-reply-all text-purple-500'))}`}></i></div>
                         <div className='flex items-center'>
                             {int.type === 'FOLLOW' ? <a className='mr-1 font-semibold' href={`/user/${int.userId}`}>{int.userName}</a> : <a className='mr-1 font-semibold' href={`/story/${int.storyId}`}>{int.storyTitle}</a>}
-                            <span className='font-light text-sm'>{`${int.type === 'LIKE' ? 'adlı hikaye beğenildi' : (int.type === 'COMMENT' ? 'adlı hikaye için yorum yapıldı' : 'adlı kullanıcı takip edildi')}.`}</span>
+                            <span className='font-light text-sm'>{`${int.type === 'LIKE' ? 'adlı hikaye beğenildi' : (int.type === 'COMMENT' ? 'adlı hikaye için bir yorum yapıldı' : (int.type === 'FOLLOW' ? 'adlı kullanıcı takip edildi' : 'adlı hikayedeki bir yoruma cevap verildi'))}`}</span>
                         </div>
                         <div className='flex-1 h-full'></div>
                         <div className='h-full px-8 text-sm flex items-center font-medium'>{formatDate(int.time)}</div>
@@ -286,7 +286,7 @@ function Profile() {
                             <div key={follower.followerId} className='w-full h-12 flex'>
                                 <div className='w-16 h-12 flex items-center justify-center'>
                                     <img
-                                        src={followDiv.name === 'followers' ? `${apiUrl}/uploads/${follower.followerId}.jpg` : `${apiUrl}/uploads/${follower.followedId}.jpg`}
+                                        src={followDiv.name === 'followers' ? `${apiUrl}/uploads/${follower.image}` : `${apiUrl}/uploads/${follower.image}`}
                                         alt="resim"
                                         className="w-8 h-8 rounded-full"
                                     />
