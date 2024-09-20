@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import React from 'react'
 import PostView from '../components/PostView';
+import Navbar from '../components/Navbar';
 const apiUrl = process.env.REACT_APP_API_URL;
 function Library() {
 
@@ -20,12 +21,17 @@ function Library() {
     if (error) return <div>Error: {error.message}</div>;
 
     return (
-        <div className="container mx-auto px-4 bg-[#eeeff0]">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="w-full min-h-screen h-auto px-4 bg-[#eeeff0]">
+            <Navbar progressBar={false} animation={true} />
+            <div className="w-full flex items-center justify-center flex-wrap pt-24">
                 {library.map((post) => (
-                    <PostView key={post.id} post={post} />
+                    <div key={post.id} className="w-1/2">
+                        <PostView post={post} />
+                    </div>
                 ))}
             </div>
+
+
         </div>
     )
 }
