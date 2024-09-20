@@ -139,7 +139,7 @@ export default function PostView({ post, isProfile }) {
         <div className="px-2 h-16 flex">
           <div
             className="w-8 h-16 flex items-center justify-center cursor-pointer">
-            <i className='fa-solid fa-bolt text-black text-lg'></i>
+            <i className='fa-solid fa-heart text-red-600 text-lg'></i>
           </div>
           <div className="w-auto h-16 text-sm text-black font-bold flex items-center justify-center select-none">
             {post.likeCount}
@@ -156,7 +156,7 @@ export default function PostView({ post, isProfile }) {
           <div
             onClick={() => mutation.mutate(post.id)}
             className="w-8 h-16 flex items-center justify-center cursor-pointer">
-            <i className={saveCheck ? 'fa-solid fa-circle-plus text-red-500 heart-icon text-lg' : 'fa-solid fa-circle-plus text-black text-lg'}></i>
+            <i className={saveCheck ? 'fa-solid fa-circle-plus text-red-500 text-lg' : 'fa-solid fa-circle-plus text-black text-lg'}></i>
           </div>
           <div className="w-auto h-16 text-sm text-black font-bold flex items-center justify-center select-none">
             {savedCount}

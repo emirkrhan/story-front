@@ -4,6 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 const apiUrl = process.env.REACT_APP_API_URL;
+
 function Login() {
 
     const navigate = useNavigate();
@@ -51,8 +52,9 @@ function Login() {
     }
 
     return (
-        <div className='w-full h-screen bg-registerPattern flex items-center justify-center'>
-            <div className='w-1/3 h-auto p-8 bg-white shadow-xl rounded-lg flex flex-col items-center'>
+        <div className='w-full h-screen bg-[#eeeff0] flex items-center justify-center'>
+            <div className='w-1/3 h-auto p-8 bg-white shadow-xl shadow-purple-300 rounded-lg flex flex-col items-center'>
+                <div className='w-full pb-4 font-bold text-2xl'>Giriş Yap</div>
                 <div className='w-full h-auto flex flex-col gap-2'>
                     <div className='w-full h-4 after:content-["*"] after:ml-0.5 after:text-red-500 font-semibold text-sm'>Kullanıcı adı</div>
                     <input
@@ -60,25 +62,30 @@ function Login() {
                         id="userName"
                         name="userName"
                         value={user.userName}
+                        placeholder='Kullanıcı adı girin'
                         onChange={handleChange}
-                        className='w-full py-2 border-2 border-gray-200 px-4 focus:border-[#7469b6] focus:border-2 outline-none rounded-md'
+                        className='w-full py-2 ring-1 ring-gray-300 px-4 focus:ring-gray-500 outline-none rounded-md'
                     />
 
 
                     <div className='w-full h-4 after:content-["*"] after:ml-0.5 after:text-red-500 font-semibold text-sm'>Şifre</div>
                     <input
-                        type="text"
+                        type="password"
                         id="userPassword"
                         name="userPassword"
                         value={user.userPassword}
+                        placeholder='Şifre girin'
                         onChange={handleChange}
-                        className='w-full py-2 border-2 border-gray-200 px-4 focus:border-[#7469b6] focus:border-2 outline-none rounded-md'
+                        className='w-full py-2 ring-1 ring-gray-300 px-4 focus:ring-gray-500 outline-none rounded-md'
                     />
 
                 </div>
 
-                <button onClick={registerUser} className='w-full h-12 bg-[#7469b6] rounded-full mt-4 text-white'>Giriş Yap</button>
+                <button onClick={registerUser} className='w-full h-12 bg-black rounded-xl mt-4 text-white transition duration-500 ease-in-out'>Giriş Yap</button>
+                <div className='w-full py-4 flex items-center justify-center text-xs font-medium gap-1'>Hesabınız yok mu? <a href='/register' className='underline'>Kayıt Ol</a></div>
+
             </div>
+
 
         </div>
     )

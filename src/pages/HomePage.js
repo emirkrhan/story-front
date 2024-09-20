@@ -75,7 +75,7 @@ function HomePage() {
 
                     <div className="w-4/12 h-auto flex flex-col">
                         <div className='w-11/12 h-auto min-h-40 mb-4 bg-white rounded-lg pb-2'>
-                            <div className='w-full p-4 text-black font-semibold text-base'>Takip Et</div>
+                            <div className='w-full p-4 text-black font-semibold text-base'>Takip Edebileceğin Kişiler</div>
                             {users ? (
                                 users.map(user => (
                                     <div key={user.id} className='w-full h-12 flex'>

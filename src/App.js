@@ -23,10 +23,13 @@ function App() {
 
   useEffect(() => {
     const user = localStorage.getItem('storyUserId');
-    if (!user) {
+    const currentPath = window.location.pathname;
+
+    if (!user && currentPath !== '/login' && currentPath !== '/register') {
       navigate('/login');
     }
   }, [navigate]);
+
 
   return (
     <Fragment>
