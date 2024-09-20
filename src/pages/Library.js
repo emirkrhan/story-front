@@ -23,9 +23,9 @@ function Library() {
     return (
         <div className="w-full min-h-screen h-auto px-4 bg-[#eeeff0]">
             <Navbar progressBar={false} animation={true} />
-            <div className="w-full flex items-center justify-center flex-wrap pt-24">
+            <div className="w-full flex flex-wrap pt-24">
                 {library.map((post) => (
-                    <div key={post.id} className="w-1/2">
+                    <div key={post.id} className="w-1/2 flex items-center justify-center">
                         <PostView post={post} />
                     </div>
                 ))}

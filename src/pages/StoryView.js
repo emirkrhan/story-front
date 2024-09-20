@@ -34,10 +34,6 @@ function StoryView() {
     },
   })
 
-
-
-
-
   const { data: story, isLoading: storyLoading, error: storyError, isSuccess: storyIsSuccess } = useQuery({
     queryKey: ["story"],
     queryFn: () => axios.get(`${apiUrl}/stories/${storyId}`).then(res => res.data),
@@ -172,7 +168,7 @@ function StoryView() {
             {comm?.pages.map((page, pageIndex) => (
               <div className='w-full flex flex-col gap-4 items-center' key={pageIndex}>
                 {page.data.map(comment => (
-                  <Comment comment={comment} userId={userId} storyWriterId={story.user.id} />
+                  <Comment comment={comment} userId={userId} storyWriterId={story.user.id} commentQuery={commentInfiniteQuery} />
                 ))}
               </div>
             ))}

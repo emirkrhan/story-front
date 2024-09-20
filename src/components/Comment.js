@@ -3,7 +3,7 @@ import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react'
 import CommentReply from './CommentReply';
 
-function Comment({ comment, userId, storyWriterId }) {
+function Comment({ comment, userId, storyWriterId, commentQuery }) {
 
     const apiUrl = process.env.REACT_APP_API_URL;
     const commentId = comment.id;
@@ -103,14 +103,21 @@ function Comment({ comment, userId, storyWriterId }) {
         getNextPageParam: (lastPage) => lastPage.nextPage,
     });
 
-    
+    const mutationDeleteComment = useMutation({
+        mutationFn: (commentId) => {
+            return axios.delete(`${apiUrl}/comments/${commentId}`);
+        },
+        onSuccess: () => {
+            commentQuery.refetch();
+        }
+    });
 
     const fetchNextPage = commentReplyInfiniteQuery.fetchNextPage;
     const hasNextPage = commentReplyInfiniteQuery.hasNextPage;
     const isFetchingNextPage = commentReplyInfiniteQuery.isFetchingNextPage;
     const replies = commentReplyInfiniteQuery.data;
     const commentReplyCount = replies?.pages[0]?.commentCount;
-    
+
 
     return (
         <div key={comment.id} className='w-full h-auto bg-white rounded-lg'>
@@ -134,8 +141,7 @@ function Comment({ comment, userId, storyWriterId }) {
                         <i className="fa-solid fa-ellipsis z-0"></i>
                         {showMenu[comment.id] && (
                             <div ref={menuRef} className='w-48 h-auto py-2 shadow-lg bg-white rounded-lg flex flex-col z-10 absolute'>
-                                {(comment.user.id === userId || storyWriterId === userId) ? <div className='w-full h-7 hover:bg-gray-100 flex items-center px-4 text-xs font-medium'>Yorumu sil</div> : null}
-                                <div className='w-full h-7 hover:bg-gray-100 flex items-center px-4 text-xs font-medium'>Profili gör</div>
+                                {(comment.user.id === userId || storyWriterId === userId) ? <div onClick={() => mutationDeleteComment.mutate(comment.id)} className='w-full h-7 hover:bg-gray-100 flex items-center px-4 text-xs font-medium'>Yorumu sil</div> : null}
                                 <div className='w-full h-7 hover:bg-gray-100 flex items-center px-4 text-xs font-medium'>Yorumu şikayet et</div>
                             </div>
                         )}
@@ -171,7 +177,7 @@ function Comment({ comment, userId, storyWriterId }) {
                             {replies?.pages.map((page, pageIndex) => (
                                 <div key={pageIndex}>
                                     {page.dataReply.map((reply) => (
-                                        <CommentReply reply={reply} replyUserId={reply.user.id}/>
+                                        <CommentReply reply={reply} replyUserId={reply.user.id} />
                                     ))}
 
                                 </div>
