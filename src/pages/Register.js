@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useFormik } from 'formik';
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -9,6 +9,16 @@ const apiUrl = process.env.REACT_APP_API_URL;
 function Register() {
 
     const navigate = useNavigate();
+
+    const [passwordType, setPasswordType] = useState("password");
+
+    const passwordTypeFunc = () => {
+        if (passwordType === "password") {
+            setPasswordType("text")
+        } else {
+            setPasswordType("password")
+        }
+    }
 
     const validationSchema = Yup.object().shape({
         userName: Yup.string()
@@ -102,16 +112,20 @@ function Register() {
                     )}
 
                     <div className='w-full h-4 after:content-["*"] after:ml-0.5 after:text-red-500 font-semibold text-sm'>Şifre</div>
-                    <input
-                        type="text"
-                        id="userPassword"
-                        name="userPassword"
-                        value={formik.values.userPassword}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        placeholder='Şifre girin'
-                        className='w-full py-2 ring-1 ring-gray-300 px-4 focus:ring-gray-500 outline-none rounded-md'
-                    />
+                    <div className="relative w-full">
+                        <input
+                            type={passwordType}
+                            id="userPassword"
+                            name="userPassword"
+                            value={formik.values.userPassword}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            placeholder='Şifre girin'
+                            className='w-full py-2 ring-1 ring-gray-300 px-4 focus:ring-gray-500 outline-none rounded-md'
+                        />
+                        <i onClick={passwordTypeFunc} class={`fa-regular ${passwordType === 'password' ? 'fa-eye' : 'fa-eye-slash'} absolute right-3 top-3 cursor-pointer`}></i>
+
+                    </div>
                     {formik.touched.userPassword && formik.errors.userPassword && (
                         <p className="text-red-500 text-xs">{formik.errors.userPassword}</p>
                     )}
