@@ -115,7 +115,7 @@ export default function PostView({ post, isProfile }) {
       <div className="w-full h-12 font-bold text-xl px-12 flex items-center truncate select-none">
         {post.storyTitle} <a href={`/category/${post.category}`} className="px-4 ml-2 rounded-full bg-black text-white text-[11px] font-medium">{getCategoryNameById(post.category)}</a>
       </div>
-      <div className="w-full max-h-36 h-auto font-normal text-sm px-12 text-gray-800 text-ellipsis overflow-hidden select-none" dangerouslySetInnerHTML={{ __html: clean }}>
+      <div className="w-full h-36 font-normal text-sm px-12 text-gray-800 text-ellipsis overflow-hidden select-none" dangerouslySetInnerHTML={{ __html: clean }}>
 
       </div>
 
