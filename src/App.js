@@ -2,7 +2,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
 import HomePage from './pages/HomePage';
 import Stories from './pages/Stories';
-import { Fragment, useEffect } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import WritingStory from './pages/WritingStory';
 import StoryView from './pages/StoryView';
 import ProfileEditing from './pages/ProfileEditing';
@@ -29,6 +29,28 @@ function App() {
       navigate('/login');
     }
   }, [navigate]);
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 900);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  if (isMobile) {
+    return (
+      <div className='w-full h-screen flex items-center justify-center p-40 text-2xl font-bold text-center'>
+        Bu uygulama mobil uyumlu değildir, lütfen daha büyük bir ekran kullanın.
+      </div>
+    );
+  }
 
 
   return (
