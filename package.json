@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@mui/material": "^6.1.1",
+    "@mui/styled-engine-sc": "^6.1.1",
     "@tanstack/react-query": "^5.29.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -27,6 +29,7 @@
     "sanitize-html": "^2.13.0",
     "slick-carousel": "^1.8.1",
     "storyproject": "file:",
+    "styled-components": "^6.1.13",
     "web-vitals": "^2.1.4",
     "yup": "^1.4.0"
   },

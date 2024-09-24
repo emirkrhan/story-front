@@ -21,9 +21,9 @@ function Notifications() {
             case 2:
                 return (<p className=' text-black/70'><span className='font-semibold text-black'>{notify.reporting.userName}</span> adlı kullanıcı <span className='font-semibold text-black'>{notify.story.storyTitle}</span> adlı hikayenizi beğendi.</p>)
             case 3:
-                return `${notify.reporting.userName} adlı kullanıcı ${notify.story.storyTitle} adlı hikayenize yorum yaptı.`;
+                return `${notify.reporting.userName} adlı kullanıcı ${notify.story.storyTitle} adlı hikayeye yorum yaptı.`;
             case 4:
-                return `${notify.reporting.userName} adlı kullanıcı ${notify.story.storyTitle} adlı hikayenizi okuma listesine ekledi.`;
+                return `${notify.reporting.userName} adlı kullanıcı ${notify.story.storyTitle} adlı hikayeyi okuma listesine ekledi.`;
             case 5:
                 return `${notify.reporting.userName} adlı kullanıcı ${notify.story.storyTitle} adlı hikayedeki yorumunuza yanıt verdi.`;
             default:
@@ -45,19 +45,19 @@ function Notifications() {
         return `${day} ${month} ${hours}:${minutes}`;
     };
 
-
-
-
     return (
         <div className='w-full h-auto min-h-screen flex bg-white pt-24'>
             <Navbar />
             <div className='w-full h-auto flex flex-col px-8 gap-2'>
                 <div className='w-full py-2 font-bold text-2xl'>Bildirimler</div>
                 {notifications?.map((notify) => (
-                    <div className={`w-10/12 py-2 px-4 shadow-md border bg-white rounded-e-lg cursor-pointer hover:shadow-xl hover:scale-[1.01] ${notify.read ? 'rounded-s-lg border-gray-300' : 'border-l-4 border-[#7469b6]'}`} key={notify.id}>
+                    <div className={`w-10/12 py-2 px-4 shadow bg-white border rounded-e-lg cursor-pointer hover:shadow-md rounded-s-lg`} key={notify.id}>
                         <div className='w-full flex py-2'>
                             <div className='px-4 h-auto'>
-                                <img src={`${apiUrl}/uploads/${notify.reporting.id}.jpg`} alt="profile" className='w-6 h-6 rounded-full object-cover' />
+                                <img
+                                    src={notify.reporting.profileImage ? `${apiUrl}/uploads/${notify.reporting.profileImage}` : '/user.jpg'}
+                                    alt="profile"
+                                    className='w-8 h-8 rounded-full object-cover' />
                             </div>
                             <div className='flex-1 flex items-center'>{renderNotificationMessage(notify)}</div>
                             <div className='px-4 h-auto text-xs font-semibold'>

@@ -36,6 +36,10 @@ const categories = [
         categoryName: "Romantizm"
     },
     {
+        id: "caf97701-a7e6-46b3-92f0-b2aebfa686c2",
+        categoryName: "Dram"
+    },
+    {
         id: "ce4d0cff-bb02-477b-8c33-41a6bbb8ac01",
         categoryName: "Tarihi Kurgu"
     },

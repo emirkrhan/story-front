@@ -82,9 +82,9 @@ function HomePage() {
                                         <div className='w-16 h-12 flex items-center justify-center'>
                                             <a href={`/user/${user.id}`}>
                                                 <img
-                                                    src={user && user.profileImage ? `${apiUrl}/uploads/${user.profileImage}` : ""}
+                                                    src={user?.profileImage ? `${apiUrl}/uploads/${user.profileImage}` : '/user.jpg'}
                                                     alt="resim"
-                                                    className="w-8 h-8 rounded-full"
+                                                    className="w-8 h-8 rounded-full object-cover"
                                                 />
                                             </a>
                                         </div>

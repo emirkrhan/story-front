@@ -3,7 +3,7 @@ import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react'
 import CommentReply from './CommentReply';
 
-function Comment({ comment, userId, storyWriterId, commentQuery }) {
+function Comment({ comment, userId, storyWriterId, commentQuery, storyId }) {
 
     const apiUrl = process.env.REACT_APP_API_URL;
     const commentId = comment.id;
@@ -18,6 +18,12 @@ function Comment({ comment, userId, storyWriterId, commentQuery }) {
         userId: userId,
         replyText: ''
     });
+
+    const mutationNotification = useMutation({
+        mutationFn: (obj) => {
+          return axios.post(`${apiUrl}/notifications/createNotification/${userId}`, obj)
+        },
+      })
 
     const handleReplyCommentChange = (e) => {
         const { name, value } = e.target;
@@ -68,6 +74,8 @@ function Comment({ comment, userId, storyWriterId, commentQuery }) {
             return axios.post(`${apiUrl}/commentsreply/${commentId}`, commentReply)
         },
         onSuccess: () => {
+            mutationNotification.mutate({ notifierId: storyWriterId, storyId: storyId, notifyType: 3, notifyData: commentReply.replyText });
+            mutationNotification.mutate({ notifierId: comment.user.id, storyId: storyId, notifyType: 5, notifyData: commentReply.replyText });
             commentReplyInfiniteQuery.refetch();
             setCommentReply(prevCommentReply => ({
                 ...prevCommentReply,
@@ -123,7 +131,7 @@ function Comment({ comment, userId, storyWriterId, commentQuery }) {
         <div key={comment.id} className='w-full h-auto bg-white rounded-lg'>
             <div className='w-full px-4 flex pt-4'>
                 <div className='w-1/12 h-10 flex items-center justify-center'>
-                    <a href={`/user/${comment.user.id}`}> <img src={`${apiUrl}/uploads/${comment.user.profileImage}`} alt="profile pht" className='w-8 h-8 rounded-full' /></a>
+                    <a href={`/user/${comment.user.id}`}> <img src={comment.user.profileImage ? `${apiUrl}/uploads/${comment.user.profileImage}` : '/user.jpg'} alt="profile pht" className='w-8 h-8 rounded-full object-cover' /></a>
                 </div>
                 <div className='flex-1 h-10 font-semibold text-sm flex items-center'>@{comment.user.userName}</div>
                 <div className='px-4 h-10 font-medium text-xs flex items-center'>{formatDate(comment.commentTime)}</div>

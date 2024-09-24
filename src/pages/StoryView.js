@@ -34,6 +34,12 @@ function StoryView() {
     },
   })
 
+  const mutationNotification = useMutation({
+    mutationFn: (obj) => {
+      return axios.post(`${apiUrl}/notifications/createNotification/${userId}`, obj)
+    },
+  })
+
   const { data: story, isLoading: storyLoading, error: storyError, isSuccess: storyIsSuccess } = useQuery({
     queryKey: ["story"],
     queryFn: () => axios.get(`${apiUrl}/stories/${storyId}`).then(res => res.data),
@@ -47,7 +53,7 @@ function StoryView() {
 
       return () => clearTimeout(timeout);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [storyIsSuccess]);
 
   const mutation2 = useMutation({
@@ -60,6 +66,7 @@ function StoryView() {
     },
     onSuccess: () => {
       likeCheckQuery.refetch();
+      mutationNotification.mutate({ notifierId: story.user.id, storyId: storyId, notifyType: 2 });
     },
   });
 
@@ -86,6 +93,7 @@ function StoryView() {
       return axios.post(`${apiUrl}/comments`, comment)
     },
     onSuccess: () => {
+      mutationNotification.mutate({ notifierId: story.user.id, storyId: storyId, notifyType: 3, notifyData: comment.commentText });
       commentInfiniteQuery.refetch();
       setComment(prevComment => ({
         ...prevComment,
@@ -168,7 +176,7 @@ function StoryView() {
             {comm?.pages.map((page, pageIndex) => (
               <div className='w-full flex flex-col gap-4 items-center' key={pageIndex}>
                 {page.data.map(comment => (
-                  <Comment comment={comment} userId={userId} storyWriterId={story.user.id} commentQuery={commentInfiniteQuery} />
+                  <Comment comment={comment} userId={userId} storyId={storyId} storyWriterId={story.user.id} commentQuery={commentInfiniteQuery} />
                 ))}
               </div>
             ))}

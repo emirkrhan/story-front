@@ -173,7 +173,7 @@ function Navbar({ progressBar, animation }) {
                     </div>
                     <div className="relative">
                         <div ref={buttonRef} className="pl-4 pr-12 h-20 flex items-center cursor-pointer" onClick={openProfileDropDownMenu}>
-                            <img src={`${apiUrl}/uploads/${userPhoto}`} alt="Profile Photos" className="w-10 h-10 rounded-full" />
+                            <img src={`${apiUrl}/uploads/${userPhoto}`} alt="Profile Photos" className="w-10 h-10 rounded-full object-cover" />
                             <i className="fa-solid fa-angle-down px-4"></i>
                         </div>
                         {dropDownMenu ? (

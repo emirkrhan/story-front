@@ -16,6 +16,12 @@ function Profile() {
         name: 'followers'
     })
 
+    const mutationNotification = useMutation({
+        mutationFn: (obj) => {
+          return axios.post(`${apiUrl}/notifications/createNotification/${myUserId}`, obj)
+        },
+      })
+
     const userQuery = useQuery({
         queryKey: ["user", userId],
         queryFn: () => axios.get(`${apiUrl}/users/${userId}`).then(res => res.data)
@@ -112,21 +118,30 @@ function Profile() {
     }
     const badge = badgeFunc(user?.badge);
 
-
     const mutationFollow = useMutation({
         mutationFn: ({ myUserId, userId, followCheck }) => {
             if (followCheck) {
                 return axios.delete(`${apiUrl}/follows/unfollow`, { data: { followerId: myUserId, followedId: userId } });
             } else {
-                return axios.post(`${apiUrl}/follows?followerId=${myUserId}&followedId=${userId}&size=5`)
+                return axios.post(`${apiUrl}/follows?followerId=${myUserId}&followedId=${userId}&size=5`);
             }
         },
-        onSuccess: () => {
-            followersQuery.refetch();
-            followedCountQuery.refetch();
-            followCheckQuery.refetch();
+        onSuccess: (data, variables) => {
+            const { followCheck } = variables;
+
+            if (followCheck) {
+                followersQuery.refetch();
+                followedCountQuery.refetch();
+                followCheckQuery.refetch();
+            } else {
+                mutationNotification.mutate({ notifierId: userId, notifyType: 1 });
+                followersQuery.refetch();
+                followedCountQuery.refetch();
+                followCheckQuery.refetch();
+            }
         }
-    })
+    });
+
 
     const showFollowersFunc = (name, value) => {
         setFollowDiv({
@@ -179,10 +194,11 @@ function Profile() {
                     <div className='w-full py-2 flex items-center justify-center'>
                         <div onClick={myUserId === userId ? handleProfileClick : null} className='cursor-pointer relative'>
                             <img
-                                src={`${apiUrl}/uploads/${user?.profileImage}`}
+                                src={user?.profileImage ? `${apiUrl}/uploads/${user.profileImage}` : '/user.jpg'}
                                 alt="Profile"
-                                className='w-24 h-24 rounded-full ring-4 ring-[#7469b6]'
+                                className='w-24 h-24 rounded-full ring-4 ring-[#7469b6] object-cover'
                             />
+
                             <div className='group w-6 h-6 bg-[#7469b6] rounded-full absolute bottom-0 right-0 flex items-center justify-center'>
                                 {badge.icon}
                                 <div className='relative'>
